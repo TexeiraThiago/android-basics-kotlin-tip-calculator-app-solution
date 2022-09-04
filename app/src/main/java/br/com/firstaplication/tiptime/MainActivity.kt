@@ -1,7 +1,11 @@
 package br.com.firstaplication.tiptime
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import br.com.firstaplication.tiptime.databinding.ActivityMainBinding
 import java.text.NumberFormat
 
@@ -22,10 +26,13 @@ class MainActivity : AppCompatActivity() {
         binding.calculateTip.setOnClickListener {
             calculateTip()
         }
+
+        binding.costOfServiceEditText.setOnKeyListener { view,keyCode,_ ->
+            handleKeyListenerEvent(view,keyCode) }
     }
 
     private fun calculateTip() {
-        val stringIndexTextField = binding.costOfService.text.toString()
+        val stringIndexTextField = binding.costOfServiceEditText.text.toString()
         val cost = stringIndexTextField.toDoubleOrNull()
         if (cost == null || cost == 0.0) {
             displayTip(0.0)
@@ -51,9 +58,22 @@ class MainActivity : AppCompatActivity() {
         binding.tipResult.text = getString(R.string.tip_amount,formattedTip)
     }
 
+    private fun handleKeyListenerEvent(view: View, Keycode:Int): Boolean{
+        if (Keycode == KeyEvent.KEYCODE_ENTER) {
+            //Hide Keyboard
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken,0)
+            return true
+        }
+        return false
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putDouble("tipResult", tip)
         super.onSaveInstanceState(outState)
     }
+
+
 }
 
