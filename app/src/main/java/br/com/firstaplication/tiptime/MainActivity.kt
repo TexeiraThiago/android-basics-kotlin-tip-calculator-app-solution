@@ -3,6 +3,7 @@ package br.com.firstaplication.tiptime
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -23,9 +24,7 @@ class MainActivity : AppCompatActivity() {
             displayTip(tip)
         }
 
-        binding.calculateTip.setOnClickListener {
-            calculateTip()
-        }
+        binding.calculateButton.setOnClickListener { calculateTip() }
 
         binding.costOfServiceEditText.setOnKeyListener { view,keyCode,_ ->
             handleKeyListenerEvent(view,keyCode) }
@@ -56,6 +55,7 @@ class MainActivity : AppCompatActivity() {
     private fun displayTip(tip: Double) {
         val formattedTip = NumberFormat.getCurrencyInstance().format(tip)
         binding.tipResult.text = getString(R.string.tip_amount,formattedTip)
+        Log.d("Value", "displayTip: "+formattedTip )
     }
 
     private fun handleKeyListenerEvent(view: View, Keycode:Int): Boolean{
